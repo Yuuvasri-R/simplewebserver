@@ -38,55 +38,37 @@ Open a browser and navigate to http://127.0.0.1:8000 (or the assigned port).
 ## PROGRAM:
 import http.server
 import socketserver
-import platform
-import psutil
 
 PORT = 8080
 
 class MyHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         if self.path == "/":
-            # Collect system info
-            specs = {
-                "System": platform.system(),
-                "Node Name": platform.node(),
-                "Release": platform.release(),
-                "Version": platform.version(),
-                "Machine": platform.machine(),
-                "Processor": platform.processor(),
-                "CPU Cores (Physical)": psutil.cpu_count(logical=False),
-                "CPU Threads (Logical)": psutil.cpu_count(logical=True),
-                "RAM (Total)": f"{round(psutil.virtual_memory().total / (1024 ** 3), 2)} GB",
-            }
-
-            # Build HTML page
             html = """
+            <!DOCTYPE html>
             <html>
             <head>
-                <title>Device Specifications</title>
+                <title>Top 5 Revenue Generating Software Companies</title>
                 <style>
-                    body { font-family: Arial, sans-serif; margin: 40px; background: #eef2f3; }
-                    h1 { color: #222; }
-                    table { border-collapse: collapse; width: 60%; }
-                    th, td { border: 1px solid #444; padding: 8px; text-align: left; }
-                    th { background-color: #222; color: white; }
-                    tr:nth-child(even) { background-color: #ddd; }
+                    body { font-family: Arial, sans-serif; text-align: center; margin-top: 30px; }
+                    table { border-collapse: collapse; margin: auto; width: 60%; }
+                    th, td { border: 1px solid black; padding: 10px; text-align: center; }
+                    th { background-color: #d9d9d9; }
                 </style>
             </head>
             <body>
-                <h1>Device Specifications</h1>
+                <h2>Top 5 Revenue Generating Software Companies</h2>
                 <table>
-                    <tr><th>Property</th><th>Value</th></tr>
-            """
-            for key, value in specs.items():
-                html += f"<tr><td>{key}</td><td>{value}</td></tr>"
-            html += """
+                    <tr><th>s.no</th><th>companies</th><th>revenue</th></tr>
+                    <tr><td>1</td><td>Microsoft</td><td>65 billion</td></tr>
+                    <tr><td>2</td><td>Oracle</td><td>29.6 billion</td></tr>
+                    <tr><td>3</td><td>IBM</td><td>29.1 billion</td></tr>
+                    <tr><td>4</td><td>SAP</td><td>6.4 billion</td></tr>
+                    <tr><td>5</td><td>Symantec</td><td>5.6 billion</td></tr>
                 </table>
             </body>
             </html>
             """
-
-            # Send response
             self.send_response(200)
             self.send_header("Content-type", "text/html")
             self.end_headers()
@@ -94,12 +76,10 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
         else:
             super().do_GET()
 
-# Start server
 with socketserver.TCPServer(("", PORT), MyHandler) as httpd:
     print(f"Serving at http://127.0.0.1:{PORT}")
     httpd.serve_forever()
 ## OUTPUT:
-![alt text](<Screenshot (18).png>)
-
+![alt text](image.png)
 ## RESULT:
 The program for implementing simple webserver is executed successfully.

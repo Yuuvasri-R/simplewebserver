@@ -1,55 +1,62 @@
-from http.server import HTTPServer, BaseHTTPRequestHandler
+import http.server
+import socketserver
+import platform
+import psutil
 
-content = """
-<!DOCTYPE html>
-<html>
-    <title>Top 5 Revenue Generating Software Companies</title>
-<body>
-    <table border="2" cellspacing='10' cellpadding='6'>
-        <caption>Top 5 Revenue Generating Software Companies</caption>
-        <tr>
-            <th>s.no</th>
-            <th>companies</th>
-            <th>revenue</th>
-        </tr>
-        <tr>
-            <th>1</th>
-            <th>Microsoft</th>
-            <th>65 billion</th>
-        </tr>
-        <tr>
-            <th>2</th>
-            <th>Oracle</th>
-            <th>29.6 billion</th>
-        </tr>
-        <tr>
-            <td>3</td>
-            <td>IBM</td>
-            <td>29.1 billion</td>
-        </tr>
-        <tr>
-            <th>4</th>
-            <th>SAP</th>
-            <th>6.4 billion</th>
-        </tr>
-        <tr>
-            <th>5</th>
-            <th>Symantec</th>
-            <th>5.6 billion</th>
-</body>
-</html>
+PORT = 8080
 
-"""
-
-class MyHandler(BaseHTTPRequestHandler):
+class MyHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
-        print("Request received")
-        self.send_response(200)
-        self.send_header('Content-type', 'text/html; charset=utf-8')
-        self.end_headers()
-        self.wfile.write(content.encode())
+        if self.path == "/":
+            # Collect system info
+            specs = {
+                "System": platform.system(),
+                "Node Name": platform.node(),
+                "Release": platform.release(),
+                "Version": platform.version(),
+                "Machine": platform.machine(),
+                "Processor": platform.processor(),
+                "CPU Cores (Physical)": psutil.cpu_count(logical=False),
+                "CPU Threads (Logical)": psutil.cpu_count(logical=True),
+                "RAM (Total)": f"{round(psutil.virtual_memory().total / (1024 ** 3), 2)} GB",
+            }
 
-server_address = ('', 8000)
-httpd = HTTPServer(server_address, MyHandler)
-print("My webserver is running...")
-httpd.serve_forever()
+            # Build HTML page
+            html = """
+            <html>
+            <head>
+                <title>Device Specifications</title>
+                <style>
+                    body { font-family: Arial, sans-serif; margin: 40px; background: #eef2f3; }
+                    h1 { color: #222; }
+                    table { border-collapse: collapse; width: 60%; }
+                    th, td { border: 1px solid #444; padding: 8px; text-align: left; }
+                    th { background-color: #222; color: white; }
+                    tr:nth-child(even) { background-color: #ddd; }
+                </style>
+            </head>
+            <body>
+                <h1>Device Specifications</h1>
+                <table>
+                    <tr><th>Property</th><th>Value</th></tr>
+            """
+            for key, value in specs.items():
+                html += f"<tr><td>{key}</td><td>{value}</td></tr>"
+            html += """
+                </table>
+            </body>
+            </html>
+            """
+
+            # Send response
+            self.send_response(200)
+            self.send_header("Content-type", "text/html")
+            self.end_headers()
+            self.wfile.write(html.encode("utf-8"))
+        else:
+            super().do_GET()
+
+# Start server
+with socketserver.TCPServer(("", PORT), MyHandler) as httpd:
+    print(f"Serving at http://127.0.0.1:{PORT}")
+    httpd.serve_forever()

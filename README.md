@@ -36,9 +36,9 @@ Start the server script and check for errors.
 Open a browser and navigate to http://127.0.0.1:8000 (or the assigned port).
 
 ## PROGRAM:
-'''
-"""
-import http.server
+<pre>
+```python
+"""import http.server
 import socketserver
 
 PORT = 8080
@@ -80,8 +80,7 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
 
 with socketserver.TCPServer(("", PORT), MyHandler) as httpd:
     print(f"Serving at http://127.0.0.1:{PORT}")
-    httpd.serve_forever()"""
-    '''
+    httpd.serve_forever()```</pre>
 ## OUTPUT:
 ![alt text](<Screenshot (19).png>)
 ## RESULT:

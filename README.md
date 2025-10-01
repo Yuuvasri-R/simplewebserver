@@ -42,11 +42,9 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 content = """
 <!DOCTYPE html>
 <html>
-<head>
     <title>Top 5 Revenue Generating Software Companies</title>
-</head>
 <body>
-    <table>
+    <table border="2" cellspacing='10' cellpadding='6'>
         <caption>Top 5 Revenue Generating Software Companies</caption>
         <tr>
             <th>s.no</th>
@@ -54,14 +52,14 @@ content = """
             <th>revenue</th>
         </tr>
         <tr>
-            <td>1</td>
-            <td>Microsoft</td>
-            <td>65 billion</td>
+            <th>1</th>
+            <th>Microsoft</th>
+            <th>65 billion</th>
         </tr>
         <tr>
-            <td>2</td>
-            <td>Oracle</td>
-            <td>29.6 billion</td>
+            <th>2</th>
+            <th>Oracle</th>
+            <th>29.6 billion</th>
         </tr>
         <tr>
             <td>3</td>
@@ -69,22 +67,20 @@ content = """
             <td>29.1 billion</td>
         </tr>
         <tr>
-            <td>4</td>
-            <td>SAP</td>
-            <td>6.4 billion</td>
+            <th>4</th>
+            <th>SAP</th>
+            <th>6.4 billion</th>
         </tr>
         <tr>
-            <td>5</td>
-            <td>Symantec</td>
-            <td>5.6 billion</td>
-        </tr>
-    </table>
+            <th>5</th>
+            <th>Symantec</th>
+            <th>5.6 billion</th>
 </body>
 </html>
 
 """
 
-class MyHandler(BaseHTTPRequestHandler):
+class myhandler(BaseHTTPRequestHandler):
     def do_GET(self):
         print("Request received")
         self.send_response(200)
@@ -100,7 +96,7 @@ httpd.serve_forever()
 
 
 ## OUTPUT:
-![alt text](<Screenshot (16).png>)
+![alt text](<Screenshot (17).png>)
 
 ## RESULT:
 The program for implementing simple webserver is executed successfully.
